@@ -7,6 +7,12 @@ public class ReservationSystem {
         trains.add(t);
         System.out.println("Train added successfully");
     }
+
+    public void viewTrains(){
+        for(Train t : trains){
+            System.out.println(t);
+        }
+    }
 }
 
 

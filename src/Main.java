@@ -16,5 +16,6 @@ public class Main {
 
         ReservationSystem rs = new ReservationSystem();
         rs.addTrains(t1);
+        rs.viewTrains();
     }
 }
