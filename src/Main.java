@@ -12,5 +12,9 @@ public class Main {
 
         System.out.println(t1.availableSeats);
         System.out.println(t1);     //object printing...
+
+
+        ReservationSystem rs = new ReservationSystem();
+        rs.addTrains(t1);
     }
 }
