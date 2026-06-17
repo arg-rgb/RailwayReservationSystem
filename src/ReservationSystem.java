@@ -15,7 +15,7 @@ public class ReservationSystem {
         }
     }
 
-    public void bookSeat(int trainid, String passengerName){
+    public synchronized void bookSeat(int trainid, String passengerName){
         if(trains.containsKey(trainid)){
             Train t = trains.get(trainid);
             if(t.getAvailableSeats() > 0){
