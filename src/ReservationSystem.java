@@ -16,8 +16,10 @@ public class ReservationSystem {
     }
 
     public void bookseat(String trainid, String passengerName){
+        boolean train_found = false;
         for(Train t : trains){
             if(trainid == t.id){
+                train_found = true;
                 if(t.availableSeats > 0){
                     t.availableSeats--;
                     Booking booking = new Booking(bookings.size()+1 + "", passengerName, trainid); //converting booking id to string and then add...
@@ -30,6 +32,7 @@ public class ReservationSystem {
                 }
             }
         }
+        if(train_found == false) System.out.println("train not found...");
     }
 }
 

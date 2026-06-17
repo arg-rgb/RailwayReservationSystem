@@ -18,7 +18,6 @@ public class Main {
         rs.addTrains(t1);
         rs.viewTrains();
 
-        Booking b1 = new Booking("1", "Argha", "001");
-        System.out.println(b1.passengerName);
+        rs.bookseat("1000", "Argha");
     }
 }
