@@ -1,12 +1,12 @@
 public class Train {
-    String id;
-    String name;
-    String source;
-    String destination;
-    int availableSeats;
+    private int id;
+    private String name;
+    private String source;
+    private String destination;
+    private int availableSeats;
 
     //constructor
-    public Train(String id,String name, String source, String destination, int availableSeats){
+    public Train(int id,String name, String source, String destination, int availableSeats){
         this.id = id;
         this.name = name;
         this.source = source;
@@ -18,5 +18,25 @@ public class Train {
     @Override
     public String toString(){
         return id + " " + name +" "+ source +" "+destination + " " + availableSeats;
+    }
+
+    public void setAvailableSeats(int seat){
+        this.availableSeats = seat;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+    
+    public int getAvailableSeats(){
+        return this.availableSeats;
+    }
+
+    public void bookSeat(){
+        availableSeats--;
+    }
+
+    public void releaseSeat(){
+        availableSeats++;
     }
 }
