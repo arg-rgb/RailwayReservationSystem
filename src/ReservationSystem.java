@@ -1,8 +1,11 @@
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ReservationSystem {
     private HashMap<Integer,Train> trains = new HashMap<>();
     private HashMap<Integer,Booking> bookings = new HashMap<>();
+
+    private ReentrantLock lock = new ReentrantLock();
 
     public void addTrains(Train t){
         trains.put(t.getId() ,t);
@@ -15,30 +18,37 @@ public class ReservationSystem {
         }
     }
 
-    public synchronized void bookSeat(int trainid, String passengerName){
-        if(trains.containsKey(trainid)){
-            Train t = trains.get(trainid);
-            if(t.getAvailableSeats() > 0){
+    public void bookSeat(int trainid, String passengerName){
+        lock.lock();
 
-                try{
-                    Thread.sleep(100);
+        try{
+            if(trains.containsKey(trainid)){
+                Train t = trains.get(trainid);
+                if(t.getAvailableSeats() > 0){
+    
+                    try{
+                        Thread.sleep(100);
+                    }
+                    catch(InterruptedException e){
+                
+                    }
+    
+                    t.bookSeat();
+                    Booking booking = new Booking((bookings.size()+1), passengerName, trainid);
+                    bookings.put(booking.getBookId(), booking);
+                    booking.setCancelled(false);
+                    System.out.println("Booking Successful...\nBooking id : " + booking.getBookId());
                 }
-                catch(InterruptedException e){
-            
+                else{
+                    System.out.println("No available seats...Sorry ;) ");
                 }
-
-                t.bookSeat();
-                Booking booking = new Booking((bookings.size()+1), passengerName, trainid);
-                bookings.put(booking.getBookId(), booking);
-                booking.setCancelled(false);
-                System.out.println("Booking Successful...\nBooking id : " + booking.getBookId());
             }
             else{
-                System.out.println("No available seats...Sorry ;) ");
+                System.out.println("Train Not Found...");
             }
         }
-        else{
-            System.out.println("Train Not Found...");
+        finally{
+            lock.unlock();
         }
     }
 
