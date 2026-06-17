@@ -19,6 +19,14 @@ public class ReservationSystem {
         if(trains.containsKey(trainid)){
             Train t = trains.get(trainid);
             if(t.getAvailableSeats() > 0){
+
+                try{
+                    Thread.sleep(100);
+                }
+                catch(InterruptedException e){
+            
+                }
+
                 t.bookSeat();
                 Booking booking = new Booking((bookings.size()+1), passengerName, trainid);
                 bookings.put(booking.getBookId(), booking);

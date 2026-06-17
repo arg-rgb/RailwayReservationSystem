@@ -2,28 +2,37 @@
 
 public class Main {
     public static void main(String[] args) {
-        Train t1 = new Train(101,"Howrah","Kolkata","Delhi",4);
-
-        // t1.id = 101;
-        // t1.name = "Howrah Express";
-        // t1.source = "Kolkata";
-        // t1.destination = "Delhi";
-        // t1.availableSeats = 100;
-
-        System.out.println(t1.getAvailableSeats());
-        System.out.println(t1);     //object printing...
-
+        Train t1 = new Train(101,"Howrah","Kolkata","Delhi",1);
 
         ReservationSystem rs = new ReservationSystem();
         rs.addTrains(t1);
-        rs.viewTrains();
+        
+        Thread thread1 = new Thread(()->{
+            rs.bookSeat(101, "user1");
+        });
 
-        rs.bookSeat(101, "Argha");
-        rs.bookSeat(101, "Ag");
-        rs.bookSeat(101, "tojo");
-        rs.bookSeat(101, "tojoGGG");
-       
-        rs.cancelBooking(3);
+        Thread thread2 = new Thread(()->{
+            rs.bookSeat(101, "user2");
+        });
+
+        Thread thread3 = new Thread(()->{
+            rs.bookSeat(101, "user3");
+        });
+
+        thread3.start();
+        thread2.start();
+        thread1.start();
+
+        try{
+            thread1.join();
+            thread2.join();
+            thread3.join();
+        }
+        catch(InterruptedException e){
+
+        }
+
         rs.viewBookings();
+        rs.viewTrains();
     }
 }
