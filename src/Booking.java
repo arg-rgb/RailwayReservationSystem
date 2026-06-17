@@ -1,9 +1,9 @@
 public class Booking {
-    int bookingId;
+    String bookingId;
     String passengerName;
-    int trainId;
+    String trainId;
 
-    public Booking(int bookingId,String passengerName,int trainId){
+    public Booking(String bookingId,String passengerName,String trainId){
         this.bookingId = bookingId;
         this.passengerName = passengerName;
         this.trainId = trainId;
