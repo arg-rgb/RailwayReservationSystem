@@ -15,29 +15,44 @@ public class deadlock {
 
                 lock2.lock();
 
-                System.out.println("1 aquires lock 2");
-
+                try{
+                    System.out.println("1 aquires lock 2");
+                }
+                finally{
+                    lock2.unlock();
+                }
             }
             catch(InterruptedException e){
                 e.printStackTrace();
             }
+            finally{
+                lock1.unlock();
+            }
         });
 
         Thread t2 = new Thread(()->{
-            lock2.lock();
+            lock1.lock();
             System.out.println("Thread 2 aquired lock 2");
 
             try{
                 Thread.sleep(100);
                 System.out.println("2 waiting for lock 1");
 
-                lock1.lock();
+                lock2.lock();
 
-                System.out.println("2 aquires lock 1");
+                try{
+                    System.out.println("2 aquires lock 1");
+                }
+                finally{
+                    lock2.unlock();
+                }
 
             }
             catch(InterruptedException e){
                 e.printStackTrace();
+            }
+            finally{
+                lock1.unlock();
             }
         });
 
