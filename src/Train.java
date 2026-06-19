@@ -39,4 +39,16 @@ public class Train {
     public void releaseSeat(){
         availableSeats++;
     }
+
+    public String getSource(){
+        return this.source;
+    }
+
+    public String getDestination(){
+        return this.destination;
+    }
+
+    public String getName(){
+        return this.name;
+    }
 }
