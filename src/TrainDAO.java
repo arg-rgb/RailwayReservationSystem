@@ -2,7 +2,7 @@ import java.sql.*;
 
 
 public class TrainDAO {
-    public void addTrains(Train train){
+    public void addTrain(Train train){
         try {
             Connection con = DatabaseManager.getConnection();
 

@@ -3,10 +3,10 @@
 public class Main {
     public static void main(String[] args) {
         
-        Train train = new Train(103, "Howrah Burdwan Chord", "Howrah","Howrah", 101);
+        Train train = new Train(303, "Howrah Burdwan Local", "Howrah","Burdwan", 95);
 
         TrainDAO dao = new TrainDAO();
-        dao.addTrains(train);
+        dao.addTrain(train);
         
     }
 }
