@@ -12,5 +12,9 @@ public class Main {
         if(t != null){
             System.out.println(t);
         }
+
+        dao.updateSeats(303, 85);
+
+        System.out.println(dao.getTrainById(303));
     }
 }

@@ -81,4 +81,25 @@ public class TrainDAO {
 
         return null;
     }
+
+    public void updateSeats(int id,int seats){
+        try {
+            Connection con = DatabaseManager.getConnection();
+
+            String sql = "update trains set available_seats = ? where id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1,seats);
+            ps.setInt(2,id);
+
+            int rows = ps.executeUpdate();
+
+            System.out.println("rows updated : " + rows);
+
+            con.close();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
 }
