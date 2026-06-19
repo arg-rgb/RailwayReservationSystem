@@ -24,4 +24,36 @@ public class TrainDAO {
             e.printStackTrace();
         }
     }
+
+
+    public void viewTrains(){
+        try {
+            Connection con = DatabaseManager.getConnection();
+
+            String sql = "select * from trains";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String source = rs.getString("source");
+                String destination = rs.getString("destination");
+                int seats = rs.getInt("available_seats");
+
+                System.out.println(
+                    id + " | " +
+                    name + " | " +
+                    source + " -> " +
+                    destination + " | Seats : " +
+                    seats
+                );
+
+                con.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
