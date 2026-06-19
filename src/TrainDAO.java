@@ -56,4 +56,29 @@ public class TrainDAO {
             e.printStackTrace();
         }
     }
+
+    public Train getTrainById(int train_id){
+        try {
+            Connection con = DatabaseManager.getConnection();
+            String sql = "select * from trains where id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,train_id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String source = rs.getString("source");
+                String destination = rs.getString("destination");
+                int seats = rs.getInt("available_seats");
+
+                return new Train(id, name, source, destination, seats);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
