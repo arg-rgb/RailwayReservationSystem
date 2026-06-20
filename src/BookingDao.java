@@ -45,9 +45,8 @@ public class BookingDao {
                     "   Train id : " + train_id +
                     "   Status : " + status
                 );
-
-                con.close();
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
