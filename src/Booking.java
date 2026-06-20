@@ -9,7 +9,7 @@ public class Booking {
         this.bookingId = bookingId;
         this.passengerName = passengerName;
         this.trainId = trainId;
-        this.isCancelled = true;
+        this.isCancelled = false;
     }
 
     public int getBookId(){
@@ -22,6 +22,14 @@ public class Booking {
 
     public void setCancelled(boolean sts){
         this.isCancelled = sts;
+    }
+
+    public boolean isCancelled(){
+        return isCancelled;
+    }
+
+    public String getPassengerName(){
+        return this.passengerName;
     }
 
     @Override
