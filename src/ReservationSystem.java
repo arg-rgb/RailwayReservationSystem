@@ -24,7 +24,7 @@ public class ReservationSystem {
                 if(t.getAvailableSeats() > 0){
                     trainDAO.updateSeats(trainid, t.getAvailableSeats() - 1);
 
-                    Booking b = new Booking(booking_counter++, passengerName, trainid, "CONFIRMED");
+                    Booking b = new Booking(booking_counter++, passengerName, trainid, BookingStatus.CONFIRMED);
 
                     bookingDao.addBooking(b);
 
@@ -54,7 +54,7 @@ public class ReservationSystem {
             System.out.println("Booking not found...");
             return;
         }
-        if(b.getStatus().equals("CANCELLED")){
+        if(b.getStatus() == BookingStatus.CANCELLED){
             System.out.println("Booking Already Cancelled...");
             return;
         }

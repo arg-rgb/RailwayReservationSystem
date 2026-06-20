@@ -1,0 +1,2 @@
+{"sessionId":"40a616","runId":"post-fix","hypothesisId":"H1","location":"VerifyEnum.java:main","message":"enum value","data":{"value":"CONFIRMED"},"timestamp":1781979671529}
+{"sessionId":"40a616","runId":"post-fix","hypothesisId":"H1","location":"VerifyEnum.java:main","message":"enum value","data":{"value":"CANCELLED"},"timestamp":1781979671535}

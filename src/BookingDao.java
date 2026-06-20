@@ -8,12 +8,12 @@ public class BookingDao {
             
             PreparedStatement ps = con.prepareStatement(sql);
 
-            String sts = booking.getStatus();
+            BookingStatus sts = booking.getStatus();
 
             ps.setInt(1,booking.getBookId());
             ps.setString(2, booking.getPassengerName());
             ps.setInt(3,booking.getTrainId());
-            ps.setString(4, sts);
+            ps.setString(4, sts.name()); // name() is for the enum
 
             int rows = ps.executeUpdate();
 
@@ -37,7 +37,7 @@ public class BookingDao {
                 int booking_id = rs.getInt("booking_id");
                 String passengerName = rs.getString("passenger_name");
                 int train_id = rs.getInt("train_id");
-                String status = rs.getString("status");
+                BookingStatus status = BookingStatus.valueOf(rs.getString("status"));
 
                 System.out.println(
                     "booking id : " + booking_id +
@@ -63,7 +63,9 @@ public class BookingDao {
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),rs.getString("status"));
+                Booking booking = new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),BookingStatus.valueOf(rs.getString("status")));
+                con.close();
+                return booking;
             }
 
             con.close();
@@ -85,7 +87,7 @@ public class BookingDao {
             System.out.println("Rows updated : " + rows);
             con.close();
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
     }
 }

@@ -49,9 +49,9 @@ public class TrainDAO {
                     destination + " | Seats : " +
                     seats
                 );
-
-                con.close();
             }
+
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,7 +73,9 @@ public class TrainDAO {
                 String destination = rs.getString("destination");
                 int seats = rs.getInt("available_seats");
 
-                return new Train(id, name, source, destination, seats);
+                Train train = new Train(id, name, source, destination, seats);
+                con.close();
+                return train;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +101,7 @@ public class TrainDAO {
             con.close();
             
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
     }
 }

@@ -3,9 +3,9 @@ public class Booking {
     private String passengerName;
     private int trainId;
 
-    private String status;
+    private BookingStatus status;
 
-    public Booking(int bookingId,String passengerName,int trainId, String status){
+    public Booking(int bookingId,String passengerName,int trainId, BookingStatus status){
         this.bookingId = bookingId;
         this.passengerName = passengerName;
         this.trainId = trainId;
@@ -20,11 +20,11 @@ public class Booking {
         return this.trainId;
     }
 
-    public String getStatus(){
+    public BookingStatus getStatus(){
         return this.status;
     }
 
-    public void setStatus(String sts){
+    public void setStatus(BookingStatus sts){
         this.status = sts;
     }
 
