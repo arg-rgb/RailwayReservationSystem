@@ -17,6 +17,7 @@ public class Main {
 
         // System.out.println(dao.getTrainById(303));
         BookingDao dao = new BookingDao();
-        dao.viewBookings();
+        
+        dao.cancelBooking(10263);
     }
 }

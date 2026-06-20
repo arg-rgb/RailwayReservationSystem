@@ -42,6 +42,6 @@ public class Booking {
 
     @Override
     public String toString(){
-        return "\nBooking id : " + bookingId + "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + status;
+        return "\nBooking id : " + bookingId + "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + "\nStatus : "+ status;
     }
 }

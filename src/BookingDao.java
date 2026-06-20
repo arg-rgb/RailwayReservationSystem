@@ -63,7 +63,7 @@ public class BookingDao {
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return new Booking(booking_id, rs.getString("passenger_name"), rs.getInt("train_id"),rs.getString("status"));
+                return new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),rs.getString("status"));
             }
 
             con.close();
@@ -71,5 +71,21 @@ public class BookingDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void cancelBooking(int booking_id){
+        try {
+            Connection con = DatabaseManager.getConnection();
+            String sql = "update bookings set status = 'CANCELLED' where booking_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,booking_id);
+
+            int rows = ps.executeUpdate();
+
+            System.out.println("Rows updated : " + rows);
+            con.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 }
