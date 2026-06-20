@@ -8,7 +8,7 @@ public class BookingDao {
             
             PreparedStatement ps = con.prepareStatement(sql);
 
-            String sts = (booking.isCancelled() ? "CANCELLED" : "CONFIRMED");
+            String sts = booking.getStatus();
 
             ps.setInt(1,booking.getBookId());
             ps.setString(2, booking.getPassengerName());
@@ -50,5 +50,26 @@ public class BookingDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Booking getBookingById(int booking_id){
+        try {
+            Connection con = DatabaseManager.getConnection();
+
+            String sql = "select * from bookings where booking_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1,booking_id);
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return new Booking(booking_id, rs.getString("passenger_name"), rs.getInt("train_id"),rs.getString("status"));
+            }
+
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

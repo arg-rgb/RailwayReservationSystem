@@ -3,13 +3,13 @@ public class Booking {
     private String passengerName;
     private int trainId;
 
-    private boolean isCancelled;
+    private String status;
 
-    public Booking(int bookingId,String passengerName,int trainId){
+    public Booking(int bookingId,String passengerName,int trainId, String status){
         this.bookingId = bookingId;
         this.passengerName = passengerName;
         this.trainId = trainId;
-        this.isCancelled = false;
+        this.status = status;
     }
 
     public int getBookId(){
@@ -20,13 +20,21 @@ public class Booking {
         return this.trainId;
     }
 
-    public void setCancelled(boolean sts){
-        this.isCancelled = sts;
+    public String getStatus(){
+        return this.status;
     }
 
-    public boolean isCancelled(){
-        return isCancelled;
+    public void setStatus(String sts){
+        this.status = sts;
     }
+
+    // public void setCancelled(boolean sts){
+    //     this.isCancelled = sts;
+    // }
+
+    // public boolean isCancelled(){
+    //     return isCancelled;
+    // }
 
     public String getPassengerName(){
         return this.passengerName;
@@ -34,6 +42,6 @@ public class Booking {
 
     @Override
     public String toString(){
-        return "\nBooking id : " + bookingId + "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + (isCancelled ? "CANCELLED" : "CONFIRMED");
+        return "\nBooking id : " + bookingId + "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + status;
     }
 }

@@ -34,9 +34,9 @@ public class ReservationSystem {
                     }
     
                     t.bookSeat();
-                    Booking booking = new Booking((bookings.size()+1), passengerName, trainid);
+                    Booking booking = new Booking((bookings.size()+1), passengerName, trainid,"CONFIRMED");
                     bookings.put(booking.getBookId(), booking);
-                    booking.setCancelled(false);
+
                     System.out.println("Booking Successful...\nBooking id : " + booking.getBookId());
                 }
                 else{
@@ -69,7 +69,7 @@ public class ReservationSystem {
             int id = cancel.getTrainId();
             Train t = trains.get(id);
             t.releaseSeat();
-            cancel.setCancelled(true);
+            cancel.setStatus("CANCELLED");
             // bookings.remove(bookingId);  not removed for history...
             System.out.println("Booking Cancelled successfully...");
         }
