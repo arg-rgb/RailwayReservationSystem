@@ -1,46 +1,37 @@
-import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReservationSystem {
-    private HashMap<Integer,Train> trains = new HashMap<>();
-    private HashMap<Integer,Booking> bookings = new HashMap<>();
+    private TrainDAO trainDAO = new TrainDAO();
+    private BookingDao bookingDao = new BookingDao();
 
+    private static int booking_counter = 10000;
     private ReentrantLock lock = new ReentrantLock();
 
     public void addTrains(Train t){
-        trains.put(t.getId() ,t);
-        System.out.println("Train added successfully");
+        trainDAO.addTrain(t);
     }
 
     public void viewTrains(){
-        for(HashMap.Entry<Integer,Train> entry : trains.entrySet()){
-            System.out.println(entry.getValue());
-        }
+        trainDAO.viewTrains();
     }
 
     public void bookSeat(int trainid, String passengerName){
         lock.lock();
 
         try{
-            if(trains.containsKey(trainid)){
-                Train t = trains.get(trainid);
+            Train t = trainDAO.getTrainById(trainid);
+            if(t != null){
                 if(t.getAvailableSeats() > 0){
-    
-                    try{
-                        Thread.sleep(100);
-                    }
-                    catch(InterruptedException e){
-                
-                    }
-    
-                    t.bookSeat();
-                    Booking booking = new Booking((bookings.size()+1), passengerName, trainid,"CONFIRMED");
-                    bookings.put(booking.getBookId(), booking);
+                    trainDAO.updateSeats(trainid, t.getAvailableSeats() - 1);
 
-                    System.out.println("Booking Successful...\nBooking id : " + booking.getBookId());
+                    Booking b = new Booking(booking_counter++, passengerName, trainid, "CONFIRMED");
+
+                    bookingDao.addBooking(b);
+
+                    System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
                 }
                 else{
-                    System.out.println("No available seats...Sorry ;) ");
+                    System.out.println("No available seats...");
                 }
             }
             else{
@@ -53,29 +44,31 @@ public class ReservationSystem {
     }
 
     public void viewBookings(){
-        if(bookings.isEmpty()){
-            System.out.println("No Bookings found...");
-            return;
-        }
-
-        for(HashMap.Entry<Integer,Booking> entry : bookings.entrySet()){
-            System.out.println(entry.getValue().toString()); //showing the booking....
-        }
+        bookingDao.viewBookings();
     }
 
     public void cancelBooking(int bookingId){
-        if(bookings.containsKey(bookingId)){
-            Booking cancel = bookings.get(bookingId);
-            int id = cancel.getTrainId();
-            Train t = trains.get(id);
-            t.releaseSeat();
-            cancel.setStatus("CANCELLED");
-            // bookings.remove(bookingId);  not removed for history...
-            System.out.println("Booking Cancelled successfully...");
+        Booking b = bookingDao.getBookingById(bookingId);
+
+        if(b == null){
+            System.out.println("Booking not found...");
+            return;
         }
-        else{
-            System.out.println("Booking id not found... :)");
+        if(b.getStatus().equals("CANCELLED")){
+            System.out.println("Booking Already Cancelled...");
+            return;
         }
+
+
+        Train t = trainDAO.getTrainById(b.getTrainId());
+        if(t == null){
+            System.out.println("Train not found...");
+            return;
+        }
+        trainDAO.updateSeats(b.getTrainId(), t.getAvailableSeats() + 1);
+
+        bookingDao.cancelBooking(bookingId);
+        System.out.println("Booking Cancelled SuccessFully...");
     }
 }
 
