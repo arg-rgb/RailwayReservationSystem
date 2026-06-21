@@ -25,6 +25,29 @@ public class BookingDao {
         }
     }
 
+    public void addBooking(Connection con ,Booking booking){
+        try {
+            String sql = "INSERT INTO bookings(booking_id, passenger_name, train_id, status) VALUES (?, ?, ?, ?)";
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            BookingStatus sts = booking.getStatus();
+
+            ps.setInt(1,booking.getBookId());
+            ps.setString(2, booking.getPassengerName());
+            ps.setInt(3,booking.getTrainId());
+            ps.setString(4, sts.name()); // name() is for the enum
+
+            int rows = ps.executeUpdate();
+
+            System.out.println("Rows inserted : " + rows);
+
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void viewBookings(){
         try {
             Connection con = DatabaseManager.getConnection();
