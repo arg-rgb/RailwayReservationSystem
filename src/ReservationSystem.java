@@ -1,3 +1,5 @@
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReservationSystem {
@@ -7,6 +9,8 @@ public class ReservationSystem {
     private static int booking_counter = 10000;
     private ReentrantLock lock = new ReentrantLock();
 
+    Connection con = null;
+
     public void addTrains(Train t){
         trainDAO.addTrain(t);
     }
@@ -15,30 +19,76 @@ public class ReservationSystem {
         trainDAO.viewTrains();
     }
 
+    // public void bookSeat(int trainid, String passengerName){
+    //     // lock.lock();
+
+    //     try{
+    //         Train t = trainDAO.getTrainById(trainid);
+    //         if(t != null){
+    //             if(t.getAvailableSeats() > 0){
+    //                 trainDAO.updateSeats(trainid, t.getAvailableSeats() - 1);
+
+    //                 Booking b = new Booking(booking_counter++, passengerName, trainid, BookingStatus.CONFIRMED);
+
+    //                 bookingDao.addBooking(b);
+
+    //                 System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
+    //             }
+    //             else{
+    //                 System.out.println("No available seats...");
+    //             }
+    //         }
+    //         else{
+    //             System.out.println("Train Not Found...");
+    //         }
+    //     }
+    //     finally{
+    //         lock.unlock();
+    //     }
+    // }
+
     public void bookSeat(int trainid, String passengerName){
         lock.lock();
+        Connection con = null;
+        try {
+            con = DatabaseManager.getConnection();
+            con.setAutoCommit(false);
 
-        try{
             Train t = trainDAO.getTrainById(trainid);
-            if(t != null){
-                if(t.getAvailableSeats() > 0){
-                    trainDAO.updateSeats(trainid, t.getAvailableSeats() - 1);
 
-                    Booking b = new Booking(booking_counter++, passengerName, trainid, BookingStatus.CONFIRMED);
-
-                    bookingDao.addBooking(b);
-
-                    System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
-                }
-                else{
-                    System.out.println("No available seats...");
-                }
+            if(t == null){
+                System.out.println("No train found");
+                return;
             }
-            else{
-                System.out.println("Train Not Found...");
+            
+            if(t.getAvailableSeats() <= 0){
+                System.out.println("No seats available..");
+                return;
             }
+
+            trainDAO.updateSeats(con,trainid, t.getAvailableSeats()-1);
+            Booking b = new Booking(booking_counter++, passengerName, trainid,BookingStatus.CONFIRMED);
+            bookingDao.addBooking(con,b);
+
+            con.commit();
+            System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
+
+        } catch (Exception e) {
+            try {
+                if(con != null){
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
         }
         finally{
+            try {
+                if(con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             lock.unlock();
         }
     }
