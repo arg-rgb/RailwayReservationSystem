@@ -5,6 +5,8 @@ public class Main {
         
         ReservationSystem rs = new ReservationSystem();
 
-        rs.searchTrain("Delhi", "Kolkata");
+        rs.bookSeat(101, "argha");
+        rs.bookSeat(101, "arghaGhosh");
+
     }
 }

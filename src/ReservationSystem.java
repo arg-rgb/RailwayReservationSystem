@@ -6,7 +6,7 @@ public class ReservationSystem {
     private TrainDAO trainDAO = new TrainDAO();
     private BookingDao bookingDao = new BookingDao();
 
-    private static int booking_counter = 20000;
+    private static int booking_counter = 30000;
     private ReentrantLock lock = new ReentrantLock();
 
     Connection con = null;
@@ -30,13 +30,11 @@ public class ReservationSystem {
             Train t = trainDAO.getTrainById(con,trainid);
 
             if(t == null){
-                System.out.println("No train found");
-                return;
+                throw new TrainNotFoundException("Train with id : " + trainid + " is not found..");
             }
             
             if(t.getAvailableSeats() <= 0){
-                System.out.println("No seats available..");
-                return;
+                throw new NoSeatsAvailableException("No available seats...in train : " + trainid);
             }
 
             trainDAO.updateSeats(con,trainid, t.getAvailableSeats()-1);
@@ -47,7 +45,29 @@ public class ReservationSystem {
             con.commit();
             System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
 
-        } catch (Exception e) {
+        }
+        catch(NoSeatsAvailableException No){
+            try {
+                if(con != null){
+                    con.rollback();
+                }
+                System.out.println(No.getMessage()); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                                               //exception means roll back
+        }
+        catch(TrainNotFoundException t){
+            try {
+                if(con != null){
+                    con.rollback();
+                }
+                System.out.println(t.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e) {
             try {
                 if(con != null){
                     con.rollback();
