@@ -97,6 +97,7 @@ public class ReservationSystem {
                 return;
             }
             trainDAO.updateSeats(con, b.getTrainId(), t.getAvailableSeats() + 1);
+            // int x = 10/0;   for only testing the transaction...
             bookingDao.cancelBooking(con,bookingId);
 
             con.commit();

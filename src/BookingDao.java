@@ -83,7 +83,6 @@ public class BookingDao {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 Booking booking = new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),BookingStatus.valueOf(rs.getString("status")));
-                con.close();
                 return booking;
             }
 
