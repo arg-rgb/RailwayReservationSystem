@@ -5,6 +5,6 @@ public class Main {
         
         ReservationSystem rs = new ReservationSystem();
 
-        rs.cancelBooking(10203);
+        rs.searchTrain("Delhi", "Kolkata");
     }
 }

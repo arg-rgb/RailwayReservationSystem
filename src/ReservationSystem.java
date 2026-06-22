@@ -122,6 +122,10 @@ public class ReservationSystem {
             lock.unlock();
         }
     }
+
+    public void searchTrain(String source, String destination){
+        trainDAO.searchTrain(source, destination);
+    }
 }
 
 
