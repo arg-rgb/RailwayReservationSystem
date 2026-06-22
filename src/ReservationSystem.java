@@ -54,7 +54,7 @@ public class ReservationSystem {
             con = DatabaseManager.getConnection();
             con.setAutoCommit(false);
 
-            Train t = trainDAO.getTrainById(trainid);
+            Train t = trainDAO.getTrainById(con,trainid);
 
             if(t == null){
                 System.out.println("No train found");
@@ -67,6 +67,7 @@ public class ReservationSystem {
             }
 
             trainDAO.updateSeats(con,trainid, t.getAvailableSeats()-1);
+            int x = 10/0;
             Booking b = new Booking(booking_counter++, passengerName, trainid,BookingStatus.CONFIRMED);
             bookingDao.addBooking(con,b);
 
