@@ -36,19 +36,8 @@ public class TrainDAO {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String source = rs.getString("source");
-                String destination = rs.getString("destination");
-                int seats = rs.getInt("available_seats");
-
-                System.out.println(
-                    id + " | " +
-                    name + " | " +
-                    source + " -> " +
-                    destination + " | Seats : " +
-                    seats
-                );
+                Train t = mapTrain(rs);
+                System.out.println(t);
             }
 
             con.close();
@@ -59,24 +48,10 @@ public class TrainDAO {
 
     public Train getTrainById(int train_id){
         try {
-            Connection con = DatabaseManager.getConnection();
-            String sql = "select * from trains where id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1,train_id);
-
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String source = rs.getString("source");
-                String destination = rs.getString("destination");
-                int seats = rs.getInt("available_seats");
-
-                Train train = new Train(id, name, source, destination, seats);
+                Connection con = DatabaseManager.getConnection();
+                Train train = getTrainById(con,train_id);
                 con.close();
                 return train;
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,13 +68,7 @@ public class TrainDAO {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String source = rs.getString("source");
-                String destination = rs.getString("destination");
-                int seats = rs.getInt("available_seats");
-
-                Train train = new Train(id, name, source, destination, seats);
+                Train train = mapTrain(rs);
                 return train;
             }
         } catch (Exception e) {
@@ -113,16 +82,7 @@ public class TrainDAO {
         try {
             Connection con = DatabaseManager.getConnection();
 
-            String sql = "update trains set available_seats = ? where id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ps.setInt(1,seats);
-            ps.setInt(2,id);
-
-            int rows = ps.executeUpdate();
-
-            System.out.println("rows updated : " + rows);
-
+            updateSeats(con,id, seats);
             con.close();
             
         } catch (Exception e) {
@@ -160,7 +120,7 @@ public class TrainDAO {
             boolean found = false;
             while(rs.next()){
                 found = true;
-                Train t = new Train(rs.getInt("id"),rs.getString("name"),rs.getString("source"),rs.getString("destination"), rs.getInt("available_seats"));
+                Train t = mapTrain(rs);
                 System.out.println(t);                
             }
             if(!found){
@@ -171,4 +131,9 @@ public class TrainDAO {
             e.printStackTrace();
         }
     }
+
+    private Train mapTrain(ResultSet rs) throws SQLException{
+        return new Train(rs.getInt("id"), rs.getString("name"),rs.getString("source"),rs.getString("destination"), rs.getInt("available_seats"));
+    }
+
 }

@@ -95,19 +95,20 @@ public class ReservationSystem {
             Booking b = bookingDao.getBookingById(con,bookingId);
             
             if(b == null){
-                System.out.println("Booking not found...");
-                return;
+                throw new BookingNotFoundException(
+                    "Booking with id " + bookingId + " not found"
+                );
             }
 
             if(b.getStatus() == BookingStatus.CANCELLED){
-                System.out.println("Booking already cancelled...");
-                return;
+                throw new BookingAlreadyCancelledException(
+                    "Booking already cancelled"
+                );
             }
 
             Train t = trainDAO.getTrainById(con,b.getTrainId());
             if(t == null){
-                System.out.println("Train not found...");
-                return;
+                throw new TrainNotFoundException("Train with id : " + b.getTrainId() + " is not found..");
             }
             trainDAO.updateSeats(con, b.getTrainId(), t.getAvailableSeats() + 1);
             // int x = 10/0;   for only testing the transaction...
@@ -116,14 +117,21 @@ public class ReservationSystem {
             con.commit();
             System.out.println("Booking Cancelled Successfully...");
 
-        } catch (Exception e) {
-            try {
-                if(con != null){
-                    con.rollback();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        }
+        catch(BookingAlreadyCancelledException e){
+            rollback(con);
+            System.out.println(e.getMessage());
+        }
+        catch(BookingNotFoundException e){
+            rollback(con);
+            System.out.println(e.getMessage());
+        }
+        catch(TrainNotFoundException e){
+            rollback(con);
+            System.out.println(e.getMessage());
+        }
+        catch (Exception e) {
+            rollback(con);
             e.printStackTrace();
         } 
         finally{
