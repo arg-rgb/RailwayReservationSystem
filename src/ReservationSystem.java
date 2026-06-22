@@ -19,33 +19,6 @@ public class ReservationSystem {
         trainDAO.viewTrains();
     }
 
-    // public void bookSeat(int trainid, String passengerName){
-    //     // lock.lock();
-
-    //     try{
-    //         Train t = trainDAO.getTrainById(trainid);
-    //         if(t != null){
-    //             if(t.getAvailableSeats() > 0){
-    //                 trainDAO.updateSeats(trainid, t.getAvailableSeats() - 1);
-
-    //                 Booking b = new Booking(booking_counter++, passengerName, trainid, BookingStatus.CONFIRMED);
-
-    //                 bookingDao.addBooking(b);
-
-    //                 System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
-    //             }
-    //             else{
-    //                 System.out.println("No available seats...");
-    //             }
-    //         }
-    //         else{
-    //             System.out.println("Train Not Found...");
-    //         }
-    //     }
-    //     finally{
-    //         lock.unlock();
-    //     }
-    // }
 
     public void bookSeat(int trainid, String passengerName){
         lock.lock();
@@ -99,27 +72,54 @@ public class ReservationSystem {
     }
 
     public void cancelBooking(int bookingId){
-        Booking b = bookingDao.getBookingById(bookingId);
+        lock.lock();
+        Connection con = null;
 
-        if(b == null){
-            System.out.println("Booking not found...");
-            return;
+        try {
+            con = DatabaseManager.getConnection();
+            con.setAutoCommit(false);
+
+            Booking b = bookingDao.getBookingById(con,bookingId);
+            
+            if(b == null){
+                System.out.println("Booking not found...");
+                return;
+            }
+
+            if(b.getStatus() == BookingStatus.CANCELLED){
+                System.out.println("Booking already cancelled...");
+                return;
+            }
+
+            Train t = trainDAO.getTrainById(con,b.getTrainId());
+            if(t == null){
+                System.out.println("Train not found...");
+                return;
+            }
+            trainDAO.updateSeats(con, b.getTrainId(), t.getAvailableSeats() + 1);
+            bookingDao.cancelBooking(con,bookingId);
+
+            con.commit();
+            System.out.println("Booking Cancelled Successfully...");
+
+        } catch (Exception e) {
+            try {
+                if(con != null){
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } 
+        finally{
+            try {
+                if(con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            lock.unlock();
         }
-        if(b.getStatus() == BookingStatus.CANCELLED){
-            System.out.println("Booking Already Cancelled...");
-            return;
-        }
-
-
-        Train t = trainDAO.getTrainById(b.getTrainId());
-        if(t == null){
-            System.out.println("Train not found...");
-            return;
-        }
-        trainDAO.updateSeats(b.getTrainId(), t.getAvailableSeats() + 1);
-
-        bookingDao.cancelBooking(bookingId);
-        System.out.println("Booking Cancelled SuccessFully...");
     }
 }
 

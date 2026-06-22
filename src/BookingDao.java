@@ -73,10 +73,8 @@ public class BookingDao {
         }
     }
 
-    public Booking getBookingById(int booking_id){
+    public Booking getBookingById(Connection con,int booking_id){
         try {
-            Connection con = DatabaseManager.getConnection();
-
             String sql = "select * from bookings where booking_id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -89,16 +87,14 @@ public class BookingDao {
                 return booking;
             }
 
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void cancelBooking(int booking_id){
+    public void cancelBooking(Connection con,int booking_id){
         try {
-            Connection con = DatabaseManager.getConnection();
             String sql = "update bookings set status = 'CANCELLED' where booking_id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,booking_id);
@@ -106,7 +102,7 @@ public class BookingDao {
             int rows = ps.executeUpdate();
 
             System.out.println("Rows updated : " + rows);
-            con.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
