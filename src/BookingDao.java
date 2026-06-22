@@ -41,8 +41,6 @@ public class BookingDao {
             int rows = ps.executeUpdate();
 
             System.out.println("Rows inserted : " + rows);
-
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

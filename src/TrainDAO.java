@@ -100,7 +100,6 @@ public class TrainDAO {
                 int seats = rs.getInt("available_seats");
 
                 Train train = new Train(id, name, source, destination, seats);
-                con.close();
                 return train;
             }
         } catch (Exception e) {
@@ -143,7 +142,6 @@ public class TrainDAO {
 
             System.out.println("rows updated : " + rows);
 
-            con.close();
             
         } catch (Exception e) {
             e.printStackTrace();

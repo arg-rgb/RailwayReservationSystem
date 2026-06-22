@@ -6,7 +6,7 @@ public class ReservationSystem {
     private TrainDAO trainDAO = new TrainDAO();
     private BookingDao bookingDao = new BookingDao();
 
-    private static int booking_counter = 10000;
+    private static int booking_counter = 20000;
     private ReentrantLock lock = new ReentrantLock();
 
     Connection con = null;
@@ -67,7 +67,7 @@ public class ReservationSystem {
             }
 
             trainDAO.updateSeats(con,trainid, t.getAvailableSeats()-1);
-            int x = 10/0;
+            // int x = 10/0;        for only testing the commiting of the transaction
             Booking b = new Booking(booking_counter++, passengerName, trainid,BookingStatus.CONFIRMED);
             bookingDao.addBooking(con,b);
 
