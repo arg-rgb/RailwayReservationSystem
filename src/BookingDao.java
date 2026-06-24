@@ -139,4 +139,29 @@ public class BookingDao {
 
         return 0;
     }
+
+    public void viewBookingsByPassenger(String passenger_name){
+        String sql = "select * from bookings where passenger_name = ?";
+        try (Connection con = DatabaseManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+                ps.setString(1,passenger_name);
+                try(ResultSet rs = ps.executeQuery()){
+                    boolean f = false;
+                    while(rs.next()){
+                        f = true;
+                        Booking b = mapBooking(rs);
+                        System.out.println(b);
+                    }
+                    if(!f){
+                        System.out.println("No bookings found for passenger : " + passenger_name);
+                    }
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Booking mapBooking(ResultSet rs) throws SQLException{
+        return new Booking(rs.getInt("booking_id"),rs.getString("passenger_name"), rs.getInt("train_id"), BookingStatus.valueOf(rs.getString("status")));
+    }
 }

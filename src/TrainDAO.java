@@ -181,4 +181,45 @@ public class TrainDAO {
         return 0;
     }
 
+    public void viewTrainsSortedBySeats(){
+        String sql = "select * from trains order by available_seats desc";
+        try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            boolean f = false;
+            while(rs.next()){
+                f= true;
+                Train t = mapTrain(rs);
+                System.out.println(t);
+            }
+
+            if(!f){
+                System.out.println("No Trains Found...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewTrainsSortedBySeats(boolean ascending){
+        String sql;
+        if(ascending){
+            sql = "select * from trains order by available_seats";
+        }else{
+            sql = "select * from trains order by available_seats desc";
+        }
+        try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            boolean f = false;
+            while(rs.next()){
+                f= true;
+                Train t = mapTrain(rs);
+                System.out.println(t);
+            }
+
+            if(!f){
+                System.out.println("No Trains Found...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
