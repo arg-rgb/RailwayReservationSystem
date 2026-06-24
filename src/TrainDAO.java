@@ -222,4 +222,26 @@ public class TrainDAO {
         }
     }
 
+
+    public void viewTrains(int limit, int offset){  //pagination query...  !!!   //offset skip that number of values then return but LIMIT means how many tuples to return 
+        String sql = "select * from trains order by id limit ? offset ?";
+        try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1,limit);
+            ps.setInt(2,offset);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                boolean f = false;
+                while (rs.next()) {
+                    f = true;
+                    Train t = mapTrain(rs);
+                    System.out.println(t);
+                }
+                if(!f){
+                    System.out.println("No trains found...");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
