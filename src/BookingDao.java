@@ -120,4 +120,23 @@ public class BookingDao {
         }
         return 0;
     }
+
+    public int getCancelledBookings(){
+        String sql = "select count(*) from bookings where status = ?";
+        try(Connection con = DatabaseManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)){
+                ps.setString(1,BookingStatus.CANCELLED.name());
+                try(ResultSet rs = ps.executeQuery()){
+                    if(rs.next()){
+                        int bookings = rs.getInt(1);
+                        return bookings;
+                    }
+                }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }
