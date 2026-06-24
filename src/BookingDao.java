@@ -47,8 +47,8 @@ public class BookingDao {
     }
 
     public void viewBookings(){
-        try {
-            Connection con = DatabaseManager.getConnection();
+        try (Connection con = DatabaseManager.getConnection()){
+            
             String sql = "select * from bookings";
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -67,23 +67,23 @@ public class BookingDao {
                     "   Status : " + status
                 );
             }
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Booking getBookingById(Connection con,int booking_id){
-        try {
-            String sql = "select * from bookings where booking_id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
 
+        String sql = "select * from bookings where booking_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(sql)) {
+            
             ps.setInt(1,booking_id);
 
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Booking booking = new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),BookingStatus.valueOf(rs.getString("status")));
-                return booking;
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    Booking booking = new Booking(rs.getInt("booking_id"), rs.getString("passenger_name"), rs.getInt("train_id"),BookingStatus.valueOf(rs.getString("status")));
+                    return booking;
+                }
             }
 
         } catch (Exception e) {
@@ -101,7 +101,6 @@ public class BookingDao {
             int rows = ps.executeUpdate();
 
             System.out.println("Rows updated : " + rows);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

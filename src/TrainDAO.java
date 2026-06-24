@@ -3,9 +3,7 @@ import java.sql.*;
 
 public class TrainDAO {
     public void addTrain(Train train){
-        try {
-            Connection con = DatabaseManager.getConnection();
-
+        try(Connection con = DatabaseManager.getConnection()) {
             String sql = "insert into trains values(?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -19,7 +17,7 @@ public class TrainDAO {
 
             System.out.println("Rows inserted : " + rows);
 
-            con.close();
+            //con.close();  don't need bcz try with resources auto closes the connection 
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,9 +25,7 @@ public class TrainDAO {
 
 
     public void viewTrains(){
-        try {
-            Connection con = DatabaseManager.getConnection();
-
+        try (Connection con = DatabaseManager.getConnection()){
             String sql = "select * from trains";
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -39,8 +35,7 @@ public class TrainDAO {
                 Train t = mapTrain(rs);
                 System.out.println(t);
             }
-
-            con.close();
+        
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,16 +55,17 @@ public class TrainDAO {
     }
 
     public Train getTrainById(Connection con ,int train_id){
-        try {
-            String sql = "select * from trains where id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
+        String sql = "select * from trains where id = ?";
+
+        try(PreparedStatement ps = con.prepareStatement(sql);) {
+            
             ps.setInt(1,train_id);
 
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
-                Train train = mapTrain(rs);
-                return train;
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    Train train = mapTrain(rs);
+                    return train;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,8 +105,7 @@ public class TrainDAO {
     }
 
     public void searchTrain(String source, String destination){
-        try {
-            Connection con = DatabaseManager.getConnection();
+        try(Connection con = DatabaseManager.getConnection()) {
             String sql = "select * from trains where source = ? and destination = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, source);
@@ -126,7 +121,6 @@ public class TrainDAO {
             if(!found){
                 System.out.println("No trains found...");
             }
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
