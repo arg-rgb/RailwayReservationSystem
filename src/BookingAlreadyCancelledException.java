@@ -1,4 +1,4 @@
-public class BookingAlreadyCancelledException extends Exception{
+public class BookingAlreadyCancelledException extends ReservationException{
     public BookingAlreadyCancelledException(String message){
         super(message);
     }
