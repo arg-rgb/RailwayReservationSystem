@@ -164,4 +164,20 @@ public class BookingDao {
     private Booking mapBooking(ResultSet rs) throws SQLException{
         return new Booking(rs.getInt("booking_id"),rs.getString("passenger_name"), rs.getInt("train_id"), BookingStatus.valueOf(rs.getString("status")));
     }
+
+    public void viewBookingHistory(){
+        String sql = "select b.booking_id, b.passenger_name , t.name , t.source , t.destination , b.status from bookings b join trains t on b.train_id = t.id";
+        try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            boolean f = false;
+            while(rs.next()){
+                f = true;
+                System.out.println("\nBooking id : " + rs.getInt("booking_id") + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
+            }
+            if(!f){
+                System.out.println("No booking found...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
