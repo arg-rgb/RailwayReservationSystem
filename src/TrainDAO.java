@@ -164,4 +164,21 @@ public class TrainDAO {
         return new Train(rs.getInt("id"), rs.getString("name"),rs.getString("source"),rs.getString("destination"), rs.getInt("available_seats"));
     }
 
+
+    public int getTotalAvailableSeats(){
+        String sql = "select sum(available_seats) from trains";
+        try(Connection con = DatabaseManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }
