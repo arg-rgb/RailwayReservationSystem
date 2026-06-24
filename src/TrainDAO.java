@@ -105,18 +105,52 @@ public class TrainDAO {
     }
 
     public void searchTrain(String source, String destination){
-        try(Connection con = DatabaseManager.getConnection()) {
-            String sql = "select * from trains where source = ? and destination = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
+        String sql = "select * from trains where source = ? and destination = ?";
+
+        try(Connection con = DatabaseManager.getConnection() ;
+            PreparedStatement ps = con.prepareStatement(sql)) {
+            
             ps.setString(1, source);
             ps.setString(2, destination);
 
-            ResultSet rs = ps.executeQuery();
             boolean found = false;
-            while(rs.next()){
-                found = true;
-                Train t = mapTrain(rs);
-                System.out.println(t);                
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    found = true;
+                    Train t = mapTrain(rs);
+                    System.out.println(t);                
+                }
+            }
+            if(!found){
+                System.out.println("No trains found...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchTrain(String source, String destination,int seats){
+        if(seats < 0){
+            System.out.println("Seats cannot be negative...");
+            return;
+        }
+
+        String sql = "select * from trains where source = ? and destination = ? and available_seats >= ?";
+
+        try(Connection con = DatabaseManager.getConnection() ;
+            PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, source);
+            ps.setString(2, destination);
+            ps.setInt(3,seats);
+
+            boolean found = false;
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    found = true;
+                    Train t = mapTrain(rs);
+                    System.out.println(t);                
+                }
             }
             if(!found){
                 System.out.println("No trains found...");

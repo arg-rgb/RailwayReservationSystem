@@ -105,4 +105,19 @@ public class BookingDao {
             e.printStackTrace();
         }
     }
+
+    public int getTotalBookings(){
+        String sql = "select count(*) from bookings";
+        try(Connection con = DatabaseManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return rs.getInt("count");  // or rs.getInt(1) means the column number 1
+                }
+            }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
