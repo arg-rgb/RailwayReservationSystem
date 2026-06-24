@@ -46,14 +46,9 @@ public class ReservationSystem {
             System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
 
         }
-        catch(NoSeatsAvailableException e){
+        catch(ReservationException e){
             rollback(con);
-            System.out.println(e.getMessage());                                  //exception means roll back
-        }
-
-        catch(TrainNotFoundException e){
-            rollback(con);
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         catch (Exception e) {
@@ -118,17 +113,9 @@ public class ReservationSystem {
             System.out.println("Booking Cancelled Successfully...");
 
         }
-        catch(BookingAlreadyCancelledException e){
+        catch(ReservationException e){
             rollback(con);
-            System.out.println(e.getMessage());
-        }
-        catch(BookingNotFoundException e){
-            rollback(con);
-            System.out.println(e.getMessage());
-        }
-        catch(TrainNotFoundException e){
-            rollback(con);
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         catch (Exception e) {
             rollback(con);
