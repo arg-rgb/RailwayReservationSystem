@@ -180,4 +180,23 @@ public class BookingDao {
             e.printStackTrace();
         }
     }
+
+    public void bookingStatistics(){
+        String sql = "select status,count(*) from bookings group by status";   
+        try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            boolean f = false;
+            while(rs.next()){
+                f = true;
+                String sts = rs.getString("status");
+                int count = rs.getInt(2); //2nd column pr "count" is the 2nd column
+                System.out.println(sts + " : " + count + "\n");
+            }
+
+            if(!f){
+                System.out.println("No Bookings found for statistics...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
