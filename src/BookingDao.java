@@ -181,7 +181,7 @@ public class BookingDao {
         }
     }
 
-    public void bookingStatistics(){
+    public void bookingStatistics(){   //this is for group by booking status count..
         String sql = "select status,count(*) from bookings group by status";   
         try (Connection con = DatabaseManager.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             boolean f = false;
