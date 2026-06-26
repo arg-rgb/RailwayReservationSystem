@@ -199,4 +199,24 @@ public class BookingDao {
             e.printStackTrace();
         }
     }
+
+    public void viewBooking(int bookingId){
+        String sql = "select b.booking_id, b.passenger_name , t.name , t.source , t.destination , b.status from trains t join bookings b on b.train_id = t.id where b.booking_id = ?";
+        try (Connection con = DatabaseManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1,bookingId);
+            try(ResultSet rs = ps.executeQuery()){
+                boolean f = false;
+                if(rs.next()){
+                    f = true;
+                    System.out.println("\nBooking id : " + rs.getInt("booking_id") + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
+                }
+                if(!f){
+                    System.out.println("No Booking found...");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
