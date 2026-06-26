@@ -2,7 +2,6 @@ public class Booking {
     private int bookingId;
     private String passengerName;
     private int trainId;
-    public int book_id;
     private BookingStatus status;
 
     public Booking(int bookingId,String passengerName,int trainId, BookingStatus status){
@@ -13,7 +12,7 @@ public class Booking {
     }
 
     public void setBookId(int id){
-        this.book_id = id;
+        this.bookingId = id;
     }
 
     public Booking(String passengerName,int trainId, BookingStatus status){
@@ -52,6 +51,6 @@ public class Booking {
 
     @Override
     public String toString(){
-        return "\nBooking id : " + bookingId + "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + "\nStatus : "+ status;
+        return "\nBooking id : " + String.format("%06d", bookingId)+ "\n"+ "Passenger Name : " + passengerName + "\n" + "Train id :" +trainId + "\nStatus : "+ status;
     }
 }

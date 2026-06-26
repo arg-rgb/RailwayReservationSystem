@@ -62,7 +62,7 @@ public class BookingDao {
                 BookingStatus status = BookingStatus.valueOf(rs.getString("status"));
 
                 System.out.println(
-                    "booking id : " + booking_id +
+                    "booking id : " + String.format("%06d", booking_id) +
                     "   Passenger Name : " + passengerName +
                     "   Train id : " + train_id +
                     "   Status : " + status
@@ -172,7 +172,7 @@ public class BookingDao {
             boolean f = false;
             while(rs.next()){
                 f = true;
-                System.out.println("\nBooking id : " + rs.getInt("booking_id") + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
+                System.out.println("\nBooking id : " + String.format("%06d", rs.getInt("booking_id")) + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
             }
             if(!f){
                 System.out.println("No booking found...");
@@ -210,7 +210,7 @@ public class BookingDao {
                 boolean f = false;
                 if(rs.next()){
                     f = true;
-                    System.out.println("\nBooking id : " + rs.getInt("booking_id") + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
+                    System.out.println("\nBooking id : " + String.format("%06d", rs.getInt("booking_id")) + "\nPassenger Name : " + rs.getString("passenger_name") + "\nTrain Name : " + rs.getString("name") + "\nSource : " + rs.getString("source") + "\nDestination : " + rs.getString("destination") + "\nStatus :" +rs.getString("status"));
                 }
                 if(!f){
                     System.out.println("No Booking found...");
