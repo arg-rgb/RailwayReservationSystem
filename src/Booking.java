@@ -2,11 +2,21 @@ public class Booking {
     private int bookingId;
     private String passengerName;
     private int trainId;
-
+    public int book_id;
     private BookingStatus status;
 
     public Booking(int bookingId,String passengerName,int trainId, BookingStatus status){
         this.bookingId = bookingId;
+        this.passengerName = passengerName;
+        this.trainId = trainId;
+        this.status = status;
+    }
+
+    public void setBookId(int id){
+        this.book_id = id;
+    }
+
+    public Booking(String passengerName,int trainId, BookingStatus status){
         this.passengerName = passengerName;
         this.trainId = trainId;
         this.status = status;

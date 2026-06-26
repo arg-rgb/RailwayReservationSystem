@@ -6,7 +6,6 @@ public class ReservationSystem {
     private TrainDAO trainDAO = new TrainDAO();
     private BookingDao bookingDao = new BookingDao();
 
-    private static int booking_counter = 30000;
     private ReentrantLock lock = new ReentrantLock();
 
     Connection con = null;
@@ -39,11 +38,14 @@ public class ReservationSystem {
 
             trainDAO.updateSeats(con,trainid, t.getAvailableSeats()-1);
             // int x = 10/0;        for only testing the commiting of the transaction
-            Booking b = new Booking(booking_counter++, passengerName, trainid,BookingStatus.CONFIRMED);
+            Booking b = new Booking(passengerName, trainid,BookingStatus.CONFIRMED);
             bookingDao.addBooking(con,b);
 
             con.commit();
-            System.out.println("Booking successFul...\nBooking id : " + b.getBookId());
+            System.out.println(
+                "Booking Successful...\nBooking ID : " +
+                String.format("%06d", b.getBookId())
+            );
 
         }
         catch(ReservationException e){

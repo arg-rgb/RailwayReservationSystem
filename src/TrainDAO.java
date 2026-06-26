@@ -105,14 +105,13 @@ public class TrainDAO {
     }
 
     public void searchTrain(String source, String destination){
-        String sql = "select * from trains where source = ? and destination = ?";
+        String sql = "select * from trains where lower(source) = lower(?) and lower(destination) = lower(?) and available_seats >= ?";
 
         try(Connection con = DatabaseManager.getConnection() ;
             PreparedStatement ps = con.prepareStatement(sql)) {
             
             ps.setString(1, source);
             ps.setString(2, destination);
-
             boolean found = false;
             try(ResultSet rs = ps.executeQuery()){
                 while(rs.next()){
@@ -135,7 +134,7 @@ public class TrainDAO {
             return;
         }
 
-        String sql = "select * from trains where source = ? and destination = ? and available_seats >= ?";
+        String sql = "select * from trains where lower(source) = lower(?) and lower(destination) = lower(?) and available_seats >= ?";
 
         try(Connection con = DatabaseManager.getConnection() ;
             PreparedStatement ps = con.prepareStatement(sql)) {

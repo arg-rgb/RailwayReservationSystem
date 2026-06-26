@@ -4,16 +4,15 @@ public class BookingDao {
     public void addBooking(Booking booking){
         try {
             Connection con = DatabaseManager.getConnection();
-            String sql = "INSERT INTO bookings(booking_id, passenger_name, train_id, status) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO bookings(passenger_name, train_id, status) VALUES (?, ?, ?, ?)";
             
             PreparedStatement ps = con.prepareStatement(sql);
 
             BookingStatus sts = booking.getStatus();
 
-            ps.setInt(1,booking.getBookId());
-            ps.setString(2, booking.getPassengerName());
-            ps.setInt(3,booking.getTrainId());
-            ps.setString(4, sts.name()); // name() is for the enum
+            ps.setString(1, booking.getPassengerName());
+            ps.setInt(2,booking.getTrainId());
+            ps.setString(3, sts.name()); // name() is for the enum
 
             int rows = ps.executeUpdate();
 
@@ -26,22 +25,24 @@ public class BookingDao {
     }
 
     public void addBooking(Connection con ,Booking booking){
-        try {
-            String sql = "INSERT INTO bookings(booking_id, passenger_name, train_id, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO bookings(passenger_name, train_id, status) VALUES (?, ?, ?)";
+        try(PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);) {
             
-            PreparedStatement ps = con.prepareStatement(sql);
 
-            BookingStatus sts = booking.getStatus();
-
-            ps.setInt(1,booking.getBookId());
-            ps.setString(2, booking.getPassengerName());
-            ps.setInt(3,booking.getTrainId());
-            ps.setString(4, sts.name()); // name() is for the enum
-
+            ps.setString(1, booking.getPassengerName());
+            ps.setInt(2,booking.getTrainId());
+            ps.setString(3, booking.getStatus().name()); // name() is for the enum
+            
             int rows = ps.executeUpdate();
+            try(ResultSet rs = ps.getGeneratedKeys();){
+
+                if(rs.next()){
+                    booking.setBookId(rs.getInt(1));
+                }
+            }
 
             System.out.println("Rows inserted : " + rows);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
