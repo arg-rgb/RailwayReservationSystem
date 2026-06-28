@@ -104,6 +104,8 @@ public class TrainDAO {
         }
     }
 
+
+    //searching train using the source and destination
     public void searchTrain(String source, String destination){
         String sql = "select * from trains where lower(source) = lower(?) and lower(destination) = lower(?)";
 
