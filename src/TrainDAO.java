@@ -139,7 +139,7 @@ public class TrainDAO {
         String sql = "select * from trains where lower(source) = lower(?) and lower(destination) = lower(?) and available_seats >= ?";
 
         try(Connection con = DatabaseManager.getConnection() ;
-            PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {   //try block with resources with auto closing that resourses
             
             ps.setString(1, source);
             ps.setString(2, destination);
