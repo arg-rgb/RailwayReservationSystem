@@ -142,7 +142,7 @@ public class BookingDao {
     }
 
     public void viewBookingsByPassenger(String passenger_name){
-        String sql = "select * from bookings where passenger_name = ?";
+        String sql = "select * from bookings where lower(passenger_name) = lower(?)";  
         try (Connection con = DatabaseManager.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)){
                 ps.setString(1,passenger_name);

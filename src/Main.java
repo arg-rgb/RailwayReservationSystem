@@ -7,9 +7,7 @@ public class Main {
         ReservationSystem reservationSystem = new ReservationSystem();
         TrainDAO trainDAO = new TrainDAO();
         BookingDao bookingDAO = new BookingDao();
-
-        int choice = sc.nextInt();
-
+        int choice = 0;
         do{
             showMenu();
 
